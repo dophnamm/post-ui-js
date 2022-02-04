@@ -8,7 +8,7 @@ module.exports = defineConfig({
 			input: {
 				main: resolve(__dirname, 'index.html'),
 				postDetail: resolve(__dirname, 'post-detail.html'),
-				addEdit: resolve(__dirname, 'post-add-edit.html'),
+				addEdit: resolve(__dirname, 'add-edit-post.html'),
 			},
 		},
 	},
