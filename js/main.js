@@ -1,9 +1,8 @@
-import axiosClient from './api/axiosClient';
+import postApi from './api/postApi';
 
 const main = async () => {
-	const response = await axiosClient.get('/posts');
-	const data = await response.data;
-	console.log(data);
+	const response = await postApi.getAll();
+	console.log(response);
 };
 
 main();
