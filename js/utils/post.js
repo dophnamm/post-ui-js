@@ -1,11 +1,10 @@
-import postApi from './api/postApi';
-import { setTextContent, truncateText } from './utils/';
+import { setTextContent, truncateText } from './common';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from 'dayjs';
 
 dayjs.extend(relativeTime);
 
-function createTemplateElement(post) {
+export function createTemplateElement(post) {
 	try {
 		const templateElement = document.getElementById('postItemTemplate');
 		if (!templateElement) return;
@@ -24,32 +23,30 @@ function createTemplateElement(post) {
 		setTextContent(liElement, '[data-id="author"]', post.author);
 		setTextContent(liElement, '[data-id="timeSpan"]', dayjs(post.updatedAt).fromNow());
 
+		//attach event
+		//click redirec go to post detail
+		const divElement = liElement.firstElementChild;
+		if (divElement) {
+			divElement.addEventListener('click', () => {
+				window.location.assign(`/post-detail.html?id=${post.id}`);
+			});
+		}
+
 		return liElement;
 	} catch (error) {
 		console.log('failure from createTemplate', error);
 	}
 }
 
-function renderPostList(postList) {
+export function renderPostList(postList) {
 	if (!Array.isArray(postList) || postList.length === 0) return;
 	const ulElement = document.getElementById('postsList');
+
+	//reset content
+	ulElement.textContent = '';
 
 	postList.map((post) => {
 		const liElement = createTemplateElement(post);
 		ulElement.appendChild(liElement);
 	});
 }
-
-(async () => {
-	try {
-		const config = {
-			_page: 1,
-			_limit: 6,
-		};
-
-		const data = await postApi.getAll(config);
-		renderPostList(data.data);
-	} catch (error) {
-		console.log('failure from main.js call api getAll', error);
-	}
-})();
