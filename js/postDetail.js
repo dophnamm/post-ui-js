@@ -1,6 +1,7 @@
 import postApi from './api/postApi';
 import { setTextContent } from './utils';
 import dayjs from 'dayjs';
+import { registerLightBox } from './utils/lightbox';
 
 async function initPostDetail() {
 	try {
@@ -49,6 +50,13 @@ function renderPostDetail(post) {
 }
 
 (() => {
+	registerLightBox({
+		modalId: 'lightBox',
+		imageSelector: 'img[data-id="lightBoxImage"]',
+		prevSelector: 'button[data-id="lightBoxPrev"]',
+		nextSelector: 'button[data-id="lightBoxNext"]',
+	});
+
 	initPostDetail();
 	renderPostDetail();
 })();
