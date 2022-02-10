@@ -32,6 +32,14 @@ export function createTemplateElement(post) {
 			});
 		}
 
+		const buttonEdit = liElement.querySelector('[data-id="edit"]');
+		if (buttonEdit) {
+			buttonEdit.addEventListener('click', (event) => {
+				window.location.assign(`/add-edit-post.html?id=${post.id}`);
+				event.stopPropagation();
+			});
+		}
+
 		return liElement;
 	} catch (error) {
 		console.log('failure from createTemplate', error);
