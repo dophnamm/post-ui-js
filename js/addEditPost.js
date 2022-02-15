@@ -1,12 +1,18 @@
 import postApi from './api/postApi';
 import { initPostForm } from './utils/postForm';
+import { toast } from './utils/toast';
 
 async function handlePostForm(formValue) {
 	try {
 		const savePost = formValue.id ? await postApi.update(formValue) : await postApi.add(formValue);
 
-		window.location.assign(`post-detail.html?id=${savePost.id}`);
+		toast.success(`${formValue.id ? 'Edit successfully' : 'Add successfully'}`);
+
+		setTimeout(() => {
+			window.location.assign(`post-detail.html?id=${savePost.id}`);
+		}, 2000);
 	} catch (error) {
+		toast.error(`${formValue.id ? 'Edit failed' : 'Add failed'}`);
 		console.log('failure from handlePostForm', error);
 	}
 }

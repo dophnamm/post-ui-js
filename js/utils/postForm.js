@@ -67,9 +67,25 @@ async function validateFormValue(form, formValue) {
 	return isValid;
 }
 
+function hideButton(form) {
+	const button = form.querySelector('[name="submitBtn"]');
+	if (button) {
+		button.disabled = false;
+	}
+}
+
+function showButton(form) {
+	const button = form.querySelector('[name="submitBtn"]');
+	if (button) {
+		button.disabled = true;
+	}
+}
+
 export function initPostForm({ formId, defaultValues, onSubmit }) {
 	const form = document.getElementById(formId);
 	if (!form) return;
+
+	let isSubmit = false;
 
 	setValueForm(form, 'title', defaultValues.title);
 	setValueForm(form, 'author', defaultValues.author);
@@ -87,12 +103,20 @@ export function initPostForm({ formId, defaultValues, onSubmit }) {
 
 	form.addEventListener('submit', async (event) => {
 		event.preventDefault();
+
+		if (isSubmit) return;
+		showButton(form);
+		isSubmit = true;
+
 		const formValue = getFormValue(form);
 		formValue.id = defaultValues.id;
 
 		const isValid = await validateFormValue(form, formValue);
 		if (!isValid) return;
 
-		onSubmit(formValue);
+		await onSubmit?.(formValue);
+
+		hideButton(form);
+		isSubmit = false;
 	});
 }
